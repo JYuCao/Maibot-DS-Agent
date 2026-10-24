@@ -1,0 +1,5 @@
+{
+  "display_name": "人物事实提取",
+  "advanced": true,
+  "description": "从真实用户直接自述提取有证据的人物事实，明确私聊受话者并保留限定。"
+}

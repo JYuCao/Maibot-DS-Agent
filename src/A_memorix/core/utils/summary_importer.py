@@ -892,6 +892,8 @@ class SummaryImporter:
                 source_type="chat_summary",
                 text=summary,
                 chat_id=stream_id,
+                person_ids=list((metadata or {}).get("person_ids", [])),
+                participants=list((metadata or {}).get("participants", [])),
                 time_start=(time_meta or {}).get("event_time_start"),
                 time_end=(time_meta or {}).get("event_time_end"),
                 metadata=metadata,

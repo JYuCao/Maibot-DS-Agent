@@ -1025,9 +1025,12 @@ class PersonProfileService:
         clean = str(text or "").strip().strip("- ")
         if not clean:
             return
-        values = buckets.setdefault(bucket, [])
-        if clean not in values:
-            values.append(clean)
+        # 同一事实只投影一次；稳定账本优先于后续分类证据，避免跨栏目重复。
+        key = "".join(clean.split()).rstrip("。.!！；;").casefold()
+        if any("".join(value.split()).rstrip("。.!！；;").casefold() == key
+               for values in buckets.values() for value in values):
+            return
+        buckets.setdefault(bucket, []).append(clean)
 
     @staticmethod
     def _format_relation_evidence_text(rel: Dict[str, Any]) -> str:

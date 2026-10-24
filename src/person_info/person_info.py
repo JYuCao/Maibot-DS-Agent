@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Optional, Union
 
 from sqlmodel import col, select
 
+import asyncio
 import hashlib
 import json
 import time
@@ -515,7 +516,7 @@ async def store_person_memory_from_answer(
     evidence_source: str = "user_supported",
     evidence_message_ids: Optional[List[str]] = None,
     fact_claim: Optional[Dict[str, Any]] = None,
-) -> None:
+) -> bool:
     """将人物事实写入长期记忆系统。
 
     Args:
@@ -526,39 +527,40 @@ async def store_person_memory_from_answer(
     clean_content = str(memory_content or "").strip()
     if not clean_content:
         logger.debug("人物事实写回跳过：memory_content 为空")
-        return
+        return False
 
     clean_chat_id = str(chat_id or "").strip()
     if not clean_chat_id:
         logger.warning("人物事实写回失败：chat_id 为空")
-        return
+        return False
 
     clean_person_name = str(person_name or "").strip()
     clean_person_id = person_id.strip()
     try:
         # 从 chat_id 获取 session
-        session = _chat_manager.get_session_by_session_id(clean_chat_id)
+        session = await asyncio.to_thread(_chat_manager.get_session_by_session_id, clean_chat_id)
         if not session:
             logger.warning(f"无法获取session for chat_id: {clean_chat_id}")
-            return
+            return False
 
         session_platform = str(getattr(session, "platform", "") or "").strip()
         session_user_id = str(getattr(session, "user_id", "") or "").strip()
         session_group_id = str(getattr(session, "group_id", "") or "").strip()
 
-        person_id = clean_person_id or resolve_person_id_for_memory(
+        person_id = clean_person_id or await asyncio.to_thread(
+            resolve_person_id_for_memory,
             person_name=clean_person_name,
             platform=session_platform,
             user_id=session_user_id,
         )
         if not person_id:
             logger.warning(f"无法确定person_id for person_name: {clean_person_name}, chat_id: {clean_chat_id}")
-            return
+            return False
 
-        person = Person(person_id=person_id)
+        person = await asyncio.to_thread(Person, person_id=person_id)
         if not person.is_known:
             logger.warning(f"用户 {clean_person_name or person_id} (person_id: {person_id}) 尚未认识，跳过写回")
-            return
+            return False
 
         participant_name = str(person.person_name or person.nickname or clean_person_name or "").strip()
 
@@ -590,6 +592,7 @@ async def store_person_memory_from_answer(
             logger.info(
                 f"成功写回人物事实到长期记忆: person={participant_name} person_id={person_id} chat_id={clean_chat_id}"
             )
+            return True
         else:
             logger.warning(
                 f"人物事实写回长期记忆失败: person={participant_name} person_id={person_id} "
@@ -598,3 +601,5 @@ async def store_person_memory_from_answer(
 
     except Exception as e:
         logger.error(f"存储人物记忆失败: {e}")
+        raise
+    return False

@@ -1,0 +1,5 @@
+{
+  "display_name": "Person fact extraction",
+  "advanced": true,
+  "description": "Extract evidence-backed direct self-statements with explicit private-chat addressee and qualifications."
+}

@@ -13,6 +13,7 @@ import time
 from json_repair import repair_json
 
 from src.common.logger import get_logger
+from src.common.prompt_i18n import load_prompt
 from src.common.database.database import ROOT_PATH
 from src.common.message_repository import count_messages, find_messages
 from src.common.data_models.message_component_data_model import TextComponent
@@ -26,6 +27,8 @@ from src.A_memorix.host_service import a_memorix_host_service
 
 from .image_writeback_journal import ImageWritebackJournal
 from .person_fact_reverification import reclassify_historical_person_facts
+from .person_fact_journal import PersonFactJournal
+from .person_fact_policy import direct_person_statement, statement_key
 
 logger = get_logger("memory_flow_service")
 
@@ -43,6 +46,7 @@ class PersonFactWritebackService:
         self._reclassify_task: Optional[asyncio.Task] = None
         self._stopping = False
         self._extractor: Any | None = None
+        self._fact_journal: Optional[PersonFactJournal] = None
 
     async def start(self) -> None:
         if self._worker_task is not None and not self._worker_task.done():
@@ -144,51 +148,61 @@ class PersonFactWritebackService:
         if self._looks_ephemeral(reply_text):
             return
 
-        target_person = self._resolve_target_person(message)
+        target_person = await asyncio.to_thread(self._resolve_target_person, message)
         if target_person is None or not target_person.is_known:
             return
-
-        evidence = self._collect_user_evidence(message, target_person)
-        if not evidence.target_messages:
-            return
-        user_evidence_text = self._format_user_evidence(evidence)
-
-        facts = await self._extract_facts(target_person, reply_text, user_evidence_text)
-        if not facts:
-            return
-
-        session_id = str(
-            getattr(message, "session_id", "") or getattr(getattr(message, "session", None), "session_id", "") or ""
-        ).strip()
+        session_id = str(message.session_id).strip()
         if not session_id:
             return
-
-        person_name = str(
-            getattr(target_person, "person_name", "") or getattr(target_person, "nickname", "") or ""
-        ).strip()
-        if not person_name:
+        session = message.session
+        if session is None:
+            raise ValueError("人物事实写回缺少已注册的真实会话")
+        evidence = await asyncio.to_thread(self._collect_user_evidence, message, target_person)
+        if not evidence.target_messages:
             return
+        if self._fact_journal is None:
+            self._fact_journal = PersonFactJournal(a_memorix_host_service.get_runtime_data_dir() / "person_fact_writeback.sqlite3")
+        message_ids = [str(item.message_id).strip() for item in evidence.target_messages]
+        claimed = await asyncio.to_thread(self._fact_journal.claim, session_id, target_person.person_id, message_ids)
+        if not claimed:
+            return
+        evidence.target_messages = [item for item in evidence.target_messages if str(item.message_id).strip() in claimed]
+        sources = {str(item.message_id).strip(): str(item.processed_plain_text) for item in evidence.target_messages}
+        private = not bool(session.group_id)
+        person_name = str(target_person.person_name or target_person.nickname).strip()
+        succeeded = False
+        try:
+            facts = await self._extract_facts(target_person, reply_text, self._format_user_evidence(evidence), private=private)
+            seen = set()
+            for item in facts:
+                mid = item.get("evidence_message_id", "")
+                quote = item.get("evidence_quote", "")
+                if not isinstance(mid, str) or not isinstance(quote, str) or mid not in sources:
+                    logger.warning("人物事实拒绝入库：提取结果未指向本次真实用户证据")
+                    continue
+                # 正文从原始证据确定性构造，不采信模型输出的悬空“对方”或新增事实值。
+                fact = direct_person_statement(quote, sources[mid], person_name=person_name,
+                                               bot_name=global_config.bot.nickname, private=private)
+                if not fact or statement_key(fact) in seen:
+                    continue
+                seen.add(statement_key(fact))
+                stored = await store_person_memory_from_answer(
+                    person_name, fact, session_id, person_id=target_person.person_id,
+                    evidence_source="user_supported", evidence_message_ids=[mid],
+                    fact_claim={"authority": "direct_user", "stability": "stable", "profile_section": "stable_facts"},
+                )
+                if not stored:
+                    raise RuntimeError("有证据的人物事实未成功写入；本次证据保留失败状态，不自动重复调用模型")
+            succeeded = True
+        finally:
+            await asyncio.to_thread(self._fact_journal.finish, session_id, target_person.person_id, claimed, succeeded=succeeded)
 
-        evidence_message_ids = [
-            str(getattr(item, "message_id", "") or "").strip()
-            for item in evidence.target_messages
-            if str(getattr(item, "message_id", "") or "").strip()
-        ]
-        for item in facts:
-            fact = str(item.get("fact", "") if isinstance(item, dict) else item).strip()
-            if not fact:
-                continue
-            # 语义判断由提取模型完成，来源 ID 由本次实际输入的消息确定。
-            # 记录完整的提取上下文，不把模型生成的消息 ID 写成真实证据。
-            await store_person_memory_from_answer(
-                person_name,
-                fact,
-                session_id,
-                person_id=str(getattr(target_person, "person_id", "") or "").strip(),
-                evidence_source="user_supported",
-                evidence_message_ids=evidence_message_ids,
-                fact_claim={"authority": "direct_user", "stability": "stable", "profile_section": "stable_facts"},
-            )
+    @staticmethod
+    def _resolve_private_person(platform: str, user_id: str) -> Optional[Person]:
+        if not platform or not user_id or is_bot_self(platform, user_id):
+            return None
+        person = Person(person_id=get_person_id(platform, user_id))
+        return person if person.is_known else None
 
     def _resolve_target_person(self, message: Any) -> Optional[Person]:
         session = getattr(message, "session", None)
@@ -197,11 +211,7 @@ class PersonFactWritebackService:
         group_id = str(getattr(session, "group_id", "") or "").strip()
 
         if session_platform and session_user_id and not group_id:
-            if is_bot_self(session_platform, session_user_id):
-                return None
-            person_id = get_person_id(session_platform, session_user_id)
-            person = Person(person_id=person_id)
-            return person if person.is_known else None
+            return self._resolve_private_person(session_platform, session_user_id)
 
         reply_to = str(getattr(message, "reply_to", "") or "").strip()
         if reply_to:
@@ -388,70 +398,29 @@ class PersonFactWritebackService:
         target_marker = " [目标用户发言]" if mark_target else ""
         return f"{prefix}{text}{target_marker}"
 
-    async def _extract_facts(self, person: Person, reply_text: str, user_evidence_text: str) -> List[Any]:
-        person_name = str(getattr(person, "person_name", "") or getattr(person, "nickname", "") or person.person_id)
-        prompt = f"""你要从用户原始发言中提取“关于{person_name}的稳定事实”。
+    async def _extract_facts(self, person: Person, reply_text: str, user_evidence_text: str,
+                             *, private: bool = False) -> List[Dict[str, Any]]:
+        person_name = str(person.person_name or person.nickname or person.person_id)
+        prompt = load_prompt(
+            "person_fact_extract", person_name=person_name, bot_name=global_config.bot.nickname,
+            chat_kind="private" if private else "group", user_evidence_text=user_evidence_text,
+            reply_text=reply_text,
+        )
+        if self._extractor is None:
+            from src.services.llm_service import LLMServiceClient
 
-目标人物：{person_name}
-用户原始发言证据：
-{user_evidence_text}
-
-机器人回复：
-{reply_text}
-
-请只提取满足以下条件的事实：
-1. 事实值必须能被“目标用户原始发言”直接支持，不能只来自机器人回复或邻近上下文。
-2. 明确是关于目标人物本人的信息。
-3. 具有相对稳定性，可以作为长期记忆保存。
-4. 用简洁中文陈述句表达。
-5. 如果用户原始发言中出现“我/我的/自己”，默认指目标人物，请先改写成关于目标人物的第三人称事实再输出。
-6. 邻近上下文只能用于补全目标用户短答、省略、被追问的问题或代词指向。例如上下文问“你对什么过敏？”，目标用户答“青霉素”，可以提取“目标人物对青霉素过敏”。
-7. 如果完整事实只能靠机器人回复或邻近上下文中的新增事实值成立，而目标用户原始发言没有确认或给出该事实值，不要提取。
-
-不要提取：
-- 机器人的情绪、计划、临时动作、客套话
-- 仅由机器人提出的建议、猜测、玩笑、回忆或承诺
-- 只适用于当前时刻的短期安排
-- 不确定、猜测、反问
-- 与目标人物无关的信息
-
-严格输出 JSON 数组，每项包含 fact、evidence_message_id、evidence_quote。证据片段必须逐字摘自目标用户原始发言。请勿编造消息 ID。例：
-[{{"fact":"他喜欢打游戏","evidence_message_id":"消息ID","evidence_quote":"我喜欢打游戏"}}]
-如果没有可写入的事实，输出 []"""
-        try:
-            if self._extractor is None:
-                from src.services.llm_service import LLMServiceClient
-
-                self._extractor = LLMServiceClient(task_name="utils", request_type="A_Memorix.person_fact_writeback")
-            response_result = await self._extractor.generate_response(prompt)
-        except Exception as exc:
-            logger.debug(f"人物事实提取模型调用失败: {exc}")
-            return []
+            self._extractor = LLMServiceClient(task_name="utils", request_type="A_Memorix.person_fact_writeback")
+        response_result = await self._extractor.generate_response(prompt)
         return self._parse_fact_items(response_result.response)
 
     @staticmethod
-    def _parse_fact_items(raw: str) -> List[Any]:
-        """解析提取结果，同时兼容字符串数组格式。"""
-
-        text = str(raw or "").strip()
-        if not text:
-            return []
-        try:
-            repaired = repair_json(text)
-            payload = json.loads(repaired) if isinstance(repaired, str) else repaired
-        except Exception:
-            return []
-        if not isinstance(payload, list):
-            return []
-        items: List[Any] = []
-        seen = set()
-        for raw_item in payload:
-            fact = str(raw_item.get("fact", "") if isinstance(raw_item, dict) else raw_item or "").strip()
-            if len(fact) < 4 or fact in seen:
-                continue
-            seen.add(fact)
-            items.append(raw_item if isinstance(raw_item, dict) else fact)
-        return items[:5]
+    def _parse_fact_items(raw: str) -> List[Dict[str, Any]]:
+        """只接受带真实证据字段的数组；非法输出明确失败，不当成成功的空结果。"""
+        repaired = repair_json(raw)
+        payload = json.loads(repaired) if isinstance(repaired, str) else repaired
+        if not isinstance(payload, list) or any(not isinstance(item, dict) for item in payload):
+            raise ValueError("人物事实提取必须返回包含证据的 JSON 对象数组")
+        return payload[:5]
 
     @staticmethod
     def _parse_fact_list(raw: str) -> List[str]:
@@ -587,14 +556,24 @@ class ChatSummaryWritebackService:
             configured_context_length=configured_context_length,
             pending_message_count=pending_message_count,
         )
+        target = None
+        if not self._extract_session_group_id(message):
+            target = await asyncio.to_thread(
+                PersonFactWritebackService._resolve_private_person,
+                str(message.platform), self._extract_session_user_id(message),
+            )
+        person_ids = [target.person_id] if target is not None and target.is_known else []
+        participants = [target.person_name or target.nickname] if target is not None and target.is_known else []
         result = await memory_service.ingest_summary(
             external_id=f"chat_auto_summary:{session_id}:{total_message_count}",
             chat_id=session_id,
             text="",
-            participants=[],
+            participants=participants,
             time_end=message_time,
             metadata={
                 "generate_from_chat": True,
+                "person_ids": person_ids,
+                "participants": participants,
                 "context_length": context_length,
                 "configured_context_length": configured_context_length,
                 "writeback_source": "memory_flow_service",

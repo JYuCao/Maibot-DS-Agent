@@ -1,0 +1,114 @@
+# 独立编排，沿用根目录官方 Docker 部署的目录布局，避免修改上游文件。
+name: maibot-qq
+services:
+  qwen:
+    image: maibot-qwen-server:b11854-cuda12
+    restart: unless-stopped
+    gpus: all
+    entrypoint: ["/bin/sh", "/runtime/start.sh"]
+    command:
+      - --model
+      - /models/Qwen3-8B-Q4_K_M.gguf
+      - --alias
+      - qwen3-8b-local
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
+      - --ctx-size
+      - "8192"
+      - --parallel
+      - "1"
+      - --threads
+      - "4"
+      - --batch-size
+      - "512"
+      - --ubatch-size
+      - "128"
+      - --n-gpu-layers
+      - "99"
+      - --flash-attn
+      - "on"
+      - --cache-type-k
+      - q8_0
+      - --cache-type-v
+      - q8_0
+      - --jinja
+      - --reasoning
+      - "off"
+      - --reasoning-budget
+      - "0"
+      - --no-ui
+      - --cors-origins
+      - http://qwen:8080
+    volumes:
+      - ../../data/local-models/qwen3-8b:/models:ro
+      - ./qwen/start.sh:/runtime/start.sh:ro
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 180s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+  embedding:
+    image: maibot-local-embedding:0.1.0
+    build: ./embedding
+    restart: unless-stopped
+    cpus: 2
+    mem_limit: 768m
+    volumes:
+      - ../../data/embedding-models:/models
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 180s
+    logging: &logging
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+  core:
+    depends_on:
+      qwen:
+        condition: service_healthy
+      embedding:
+        condition: service_healthy
+    image: ${MAIBOT_IMAGE:-maibot-qq-core:1.3.15-062d45cf8}
+    restart: unless-stopped
+    stop_grace_period: 70s
+    environment:
+      TZ: Asia/Shanghai
+      WEBUI_HOST: 0.0.0.0
+      EULA_AGREE: ${EULA_AGREE:-}
+      PRIVACY_AGREE: ${PRIVACY_AGREE:-}
+      MAIBOT_STATISTICS_REPORT_PATH: /MaiMBot/data/maibot_statistics.html
+    ports:
+      - "127.0.0.1:18001:8001"
+    volumes:
+      - ../../docker-config/mmc:/MaiMBot/config
+      - ../../data/MaiMBot:/MaiMBot/data
+      - ../../data/MaiMBot-plugin-data:/MaiMBot/data/plugins
+      - ../../data/MaiMBot/emoji:/data/emoji
+      - ../../plugins/MaiBot-Napcat-Adapter:/MaiMBot/plugins/MaiBot-Napcat-Adapter
+      - ../../plugins/social_life_plugin:/MaiMBot/plugins/social_life_plugin
+      - ../../data/MaiMBot/logs:/MaiMBot/logs
+    logging: *logging
+  napcat:
+    image: ${NAPCAT_IMAGE:-maibot-qq-napcat:4.18.41}
+    restart: unless-stopped
+    environment:
+      NAPCAT_UID: "1000"
+      NAPCAT_GID: "1000"
+      TZ: Asia/Shanghai
+    ports:
+      - "127.0.0.1:6099:6099"
+    volumes:
+      - ../../docker-config/napcat:/app/napcat/config
+      - ../../data/qq:/app/.config/QQ
+      - ../../data/MaiMBot:/MaiMBot/data
+    logging: *logging

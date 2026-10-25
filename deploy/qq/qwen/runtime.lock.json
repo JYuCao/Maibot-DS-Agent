@@ -1,0 +1,14 @@
+{
+  "image_source": "ghcr.io/ggml-org/llama.cpp",
+  "platform": "linux/amd64",
+  "manifest_digest": "sha256:b0b02b5d7c61bedbf10e7e63836a6e3af84b5ab6606d3873a0ba0c4dd10f9707",
+  "version": "b11854",
+  "source_revision": "8e5a58df87ab59dfceb5b961ae26691e39f30c24",
+  "cuda_version": "12.8.1",
+  "local_image": "maibot-qwen-server:b11854-cuda12",
+  "loaded_image_id": "sha256:d07da0e432f29a530bc088c6103fa12e9419454e312d8d65eeab2f438503173e",
+  "model_repository": "Qwen/Qwen3-8B-GGUF",
+  "model_revision": "7c41481f57cb95916b40956ab2f0b139b296d974",
+  "model_file": "Qwen3-8B-Q4_K_M.gguf",
+  "model_sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785"
+}

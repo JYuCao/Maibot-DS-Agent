@@ -1,0 +1,6 @@
+# 历史挂载草案，已并入 compose.yaml；保留供对照，不再需要额外加载。
+# 只新增插件源码挂载，不更换主程序、不改数据库、不增加 GPU 服务。
+services:
+  core:
+    volumes:
+      - ../../plugins/social_life_plugin:/MaiMBot/plugins/social_life_plugin

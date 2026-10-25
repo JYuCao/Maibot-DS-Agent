@@ -1,0 +1,95 @@
+# 部署模板版本：6；字段来自 v1.3.15 Config。
+[chat]
+enable_reply_at = true
+max_context_size = 20
+max_private_context_size = 30
+context_compaction_summary_max_chars = 2000
+[chat.reply_timing]
+talk_value = 0.30
+message_debounce_mode = "natural"
+planner_message_steering = false
+mentioned_bot_reply = true
+inevitable_at_reply = true
+no_action_backoff_base_seconds = 30
+no_action_backoff_cap_seconds = 300
+[response_splitter]
+max_split_num = 2
+[chinese_typo]
+enable = false
+[telemetry]
+enable = false
+[debug]
+enable_console_input = false
+save_maisaka_reasoning = false
+[log]
+file_log_level = "INFO"
+max_log_files = 10
+log_cleanup_days = 14
+event_loop_watchdog_enabled = true
+[maim_message]
+enabled = false
+[mcp]
+enable = false
+[plugin_runtime.render]
+enabled = false
+auto_download_chromium = false
+[visual]
+max_image_num = 4
+[voice]
+enable_asr = false
+[emoji]
+steal_emoji = false
+[expression]
+max_expression_learner = 1
+expression_self_reflect = false
+expression_groups = []
+[jargon]
+jargon_groups = []
+[a_memorix]
+global_memory_sharing_enabled = true
+shared_memory_groups = []
+[a_memorix.plugin]
+enabled = true
+[a_memorix.image_memory]
+enabled = false
+[a_memorix.integration]
+memory_query_default_limit = 3
+enable_person_profile_query_tool = true
+enable_person_profile_injection = true
+heuristic_memory_recall_enabled = false
+heuristic_memory_cross_chat_enabled = false
+heuristic_memory_group_to_private_enabled = false
+heuristic_memory_private_to_group_enabled = false
+person_fact_writeback_enabled = true
+chat_summary_writeback_message_threshold = 60
+chat_summary_writeback_context_length = 40
+fuzzy_modify_allow_global_scope = false
+fuzzy_modify_auto_execute_enabled = false
+person_profile_injection_max_profiles = 1
+[a_memorix.person_profile]
+enabled = true
+max_refresh_per_cycle = 5
+refresh_queue_batch_size = 2
+top_k_evidence = 8
+[a_memorix.embedding]
+model_name = "bge-small-zh-cpu"
+dimension = 512
+dimension_request_mode = "never"
+batch_size = 8
+max_concurrent = 1
+enable_cache = true
+[a_memorix.embedding.fallback]
+enabled = false
+allow_metadata_only_write = false
+[a_memorix.filter.retrieval.chat_stream]
+enabled = false
+mode = "blacklist"
+chats = []
+[a_memorix.filter.retrieval.chat_summary]
+enabled = false
+mode = "blacklist"
+chats = []
+[a_memorix.filter.retrieval.episode]
+enabled = false
+mode = "blacklist"
+chats = []

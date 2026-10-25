@@ -1,0 +1,100 @@
+# 部署偏好模板版本：5；真实 QQ 主动发送仍须明确授权后在本地启用。
+[plugin]
+enabled = false
+config_version = "0.6.0"
+locale = "zh_CN"
+
+[access]
+administrator = ""
+bot_account = ""
+groups = []
+local_webui_enabled = true
+
+[behavior]
+enabled = true
+group_length = "通常一两句；有内容可以补充一点，玩笑不解释，不强行凑长度"
+private_length = "通常自然说两到四句，多一点自己的看法和细节；顺着对方节奏，简单话题仍然简短，不机械追问"
+frequency_adjustment = true
+burst_window_seconds = 75
+burst_reply_count = 3
+burst_multiplier = 0.5
+repeat_window_seconds = 600
+prompt_max_chars = 1000
+
+[emotion]
+enabled = true
+half_life_minutes = 90
+max_step = 0.06
+shared_across_sessions = true
+
+[relationship]
+enabled = true
+daily_familiarity_step = 0.2
+event_max_trust_step = 0.03
+shared_across_sessions = true
+
+[life]
+enabled = true
+
+[proactive]
+enabled = true
+group_enabled = true
+private_enabled = false
+real_sending_authorized = false
+local_enabled = false
+local_sending_authorized = false
+cooldown_minutes = 120
+daily_limit = 0
+group_daily_limit = 0
+private_daily_limit = 0
+quiet_start = "23:00"
+quiet_end = "08:00"
+idle_min_minutes = 30
+idle_max_minutes = 90
+stale_after_hours = 6
+group_cooldown_minutes = 240
+private_cooldown_minutes = 60
+
+[diary]
+enabled = true
+generation_time = "23:10"
+directory = "diaries"
+private_delivery_authorized = false
+auto_private_delivery = false
+source_limit_per_group = 60
+source_max_chars = 2200
+max_tokens = 512
+model_name = "qwen3-8b-local"
+defer_after_chat_seconds = 120
+catchup_previous_day = true
+include_local_private = false
+
+[social]
+qzone_enabled = false
+qzone_accounts = []
+
+[cross_context]
+enabled = true
+group_to_private = true
+private_to_group = true
+recent_minutes = 120
+messages_per_group = 4
+max_chars = 1400
+group_private_chance = 0.1
+group_private_cooldown_minutes = 360
+
+[qzone_auto]
+enabled = false
+real_sending_authorized = false
+own_enabled = true
+friends_enabled = true
+interval_min_hours = 24
+interval_max_hours = 48
+friends_per_cycle = 3
+replies_per_cycle = 2
+max_feed_age_days = 7
+write_gap_seconds = 30
+cycle_gap_hours = 6
+model_name = "qwen3-8b-local"
+max_tokens = 256
+credential_source = "napcat"

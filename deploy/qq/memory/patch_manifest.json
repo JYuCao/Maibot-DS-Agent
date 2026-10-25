@@ -1,0 +1,18 @@
+{
+  "image": "maibot-qq-core:1.3.15-memory-fix-edbed3d2a9bd",
+  "base_image": "maibot-qq-core:1.3.15-062d45cf8",
+  "files": {
+    "src/services/memory_flow_service.py": "7fa3ee9f2ba3e6671740811515fdf84a6556bf13a216cc1c1e488501004c7473",
+    "src/services/person_fact_journal.py": "5b5a474f08aea895fb96430db8171b6d439367486b2100a1b7c7d3b6bb539d4e",
+    "src/services/person_fact_policy.py": "d8722bdf476a7ccdc753f2cfe2ce5e17331828690222124546b75242a90132ee",
+    "src/person_info/person_info.py": "225da672c59d3decda09dfce4af0133a4e7d69e319d393e27eb3c56204190287",
+    "src/A_memorix/core/utils/person_profile_service.py": "02be4dc248116da4a18c971b4875f91aea365b9f519c02158aa0dccf5e279396",
+    "src/A_memorix/core/utils/summary_importer.py": "69334313cc745bb7ab1aa5ea4964a885a47f50ec6e6f82762e860467e4ac0929",
+    "prompts/zh-CN/person_fact_extract.prompt": "5a64f22a6d3d8263f5e7aba37e45a036ba82784ad7dee600fbe36c774f88cef8",
+    "prompts/zh-CN/person_fact_extract.meta.json": "a96117646917cd215c78a4777aab78e2bb58140faa978f0efc5dd1cf78c71204",
+    "prompts/en-US/person_fact_extract.prompt": "697d8bdc889eb46076e57be28eef1ba4485ac66cfbf45e14f578a3f0cca35af2",
+    "prompts/en-US/person_fact_extract.meta.json": "a6bbb4d3894e56a91eedc84054683b0718548c65b4cff15f479fab03459c34a4",
+    "prompts/ja-JP/person_fact_extract.prompt": "f463cae6da477a3531f6cdda9b7121cf45d956ae76ca1cbec3380e0a282d4943",
+    "prompts/ja-JP/person_fact_extract.meta.json": "68aa3256239624827d806f3d0a21aad7dbab27bae76515158548d128d09b80c0"
+  }
+}

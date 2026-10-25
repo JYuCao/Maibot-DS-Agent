@@ -1,0 +1,66 @@
+# 部署模板版本：1。密钥只写入未跟踪的运行配置。
+[[api_providers]]
+name = "DeepSeek"
+base_url = "https://api.deepseek.com"
+api_key = "NOT_CONFIGURED"
+client_type = "openai"
+max_retry = 2
+timeout = 60
+retry_interval = 5
+
+[[api_providers]]
+name = "LocalEmbedding"
+base_url = "http://embedding:8080/v1"
+auth_type = "none"
+client_type = "openai"
+max_retry = 1
+timeout = 60
+
+[[models]]
+name = "deepseek-flash"
+model_identifier = "deepseek-flash"
+model_type = "llm"
+api_provider = "DeepSeek"
+visual = true
+# 采用官方高峰价估算上限；周末/空闲时间实际账单更低，以官方账单为准。
+price_in = 2.0
+cache_price_in = 0.04
+price_out = 8.0
+[models.extra_params.thinking]
+type = "disabled"
+
+[[models]]
+name = "bge-small-zh-cpu"
+model_identifier = "BAAI/bge-small-zh-v1.5"
+model_type = "embedding"
+api_provider = "LocalEmbedding"
+price_in = 0.0
+price_out = 0.0
+
+[model_task_config.replyer]
+model_list = ["deepseek-flash"]
+max_tokens = 384
+temperature = 0.9
+hard_timeout = 90.0
+[model_task_config.planner]
+model_list = ["deepseek-flash"]
+max_tokens = 1024
+temperature = 0.5
+hard_timeout = 90.0
+[model_task_config.utils]
+model_list = ["deepseek-flash"]
+max_tokens = 1536
+temperature = 0.3
+hard_timeout = 90.0
+[model_task_config.memory]
+model_list = ["deepseek-flash"]
+max_tokens = 2048
+temperature = 0.2
+hard_timeout = 120.0
+[model_task_config.vlm]
+model_list = ["deepseek-flash"]
+max_tokens = 256
+hard_timeout = 90.0
+[model_task_config.embedding]
+model_list = ["bge-small-zh-cpu"]
+hard_timeout = 60.0

@@ -1,0 +1,12 @@
+# WSL 已有 /dev/dxg 和 Windows 提供的 libcuda；不用修改 Docker daemon。
+# 普通 Linux 使用主编排的 gpus: all，并安装 NVIDIA Container Toolkit。
+services:
+  qwen:
+    gpus: !reset []
+    devices:
+      - /dev/dxg:/dev/dxg
+    volumes:
+      - /usr/lib/wsl/lib:/usr/lib/wsl/lib:ro
+      - /usr/lib/wsl/drivers:/usr/lib/wsl/drivers:ro
+    environment:
+      LD_LIBRARY_PATH: /usr/lib/wsl/lib:/usr/local/cuda/lib64:/app

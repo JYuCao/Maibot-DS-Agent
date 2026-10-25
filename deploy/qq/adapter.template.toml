@@ -1,0 +1,22 @@
+[plugin]
+enabled = true
+enable_private_chat_tool = false
+config_version = "0.1.0"
+[napcat_server]
+host = "napcat"
+port = 3001
+token = ""
+heartbeat_interval = 30.0
+reconnect_delay_sec = 5.0
+action_timeout_sec = 15.0
+[chat]
+enable_chat_list_filter = true
+group_list_type = "whitelist"
+group_list = []
+private_list_type = "whitelist"
+private_list = []
+ban_qq_bot = true
+[notice]
+enabled = false
+[filters]
+ignore_self_message = true

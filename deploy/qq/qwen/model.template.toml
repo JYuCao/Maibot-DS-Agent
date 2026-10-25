@@ -1,0 +1,24 @@
+# 本地回复模型补充模板版本：1。由 configure.py --use-qwen 合并，不替换整份模型配置。
+[[api_providers]]
+name = "LocalQwen"
+base_url = "http://qwen:8080/v1"
+auth_type = "none"
+client_type = "openai"
+timeout = 90
+max_retry = 1
+retry_interval = 3
+
+[[models]]
+name = "qwen3-8b-local"
+model_identifier = "qwen3-8b-local"
+model_type = "llm"
+api_provider = "LocalQwen"
+visual = false
+price_in = 0.0
+price_out = 0.0
+
+[model_task_config.replyer]
+model_list = ["qwen3-8b-local"]
+max_tokens = 384
+temperature = 0.8
+hard_timeout = 120.0

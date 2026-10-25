@@ -1,0 +1,5 @@
+[project]
+name = "maibot-local-embedding"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = ["fastapi>=0.136,<0.137", "fastembed>=0.7,<0.8", "uvicorn>=0.45,<0.46"]

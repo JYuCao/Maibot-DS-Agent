@@ -1,0 +1,74 @@
+[plugin]
+name = "smart_poke_plugin"
+config_version = "1.9.0"
+enabled = true
+record_self_poke_to_context = false
+adapter_plugin_id = "maibot-team.napcat-adapter"
+
+[reaction]
+react_probability = 0.55
+back_poke_weight = 0.6
+llm_weight = 0.25
+emoji_weight = 0.1
+text_weight = 0.05
+silent_chat_probability = 0.0
+swallow_when_silent = true
+min_delay_seconds = 1.0
+max_delay_seconds = 2.5
+cooldown_seconds = 45
+max_reactions_per_minute = 2
+back_poke_max_times = 1
+spam_threshold = 5
+spam_window_seconds = 45
+react_in_group = true
+react_in_private = true
+llm_model = "replyer"
+llm_max_tokens = 96
+llm_temperature = 1.0
+llm_persona = ""
+llm_response_style = "自然接一句，优先用本鲸或鲸鲸自称，不必每次都自称；最多一句，不编造共同经历。"
+llm_context_messages = 6
+
+[fallback]
+normal_replies = ["何意味", "你是不是没事干", "干啥"]
+spam_replies = ["够了", "好烦", "停！手！", "烦不烦", "再戳生气了"]
+silent_replies = ["...", "？？？", "，，，"]
+
+[user_control]
+blacklist = []
+ignore_self_poke = true
+
+[emoji]
+description_keywords = ["疑惑", "无奈", "生气", "无语", "嫌弃", "不满"]
+allow_random_fallback = false
+
+[bystander]
+enabled = false
+probability = 0.1
+target_strategy = "random"
+cooldown_seconds = 600
+swallow_event = true
+min_delay_seconds = 1.5
+max_delay_seconds = 4.0
+whitelist_groups = []
+blacklist_groups = []
+
+[proactive]
+enabled = false
+probability = 0.01
+active_hour_start = 8
+active_hour_end = 23
+per_chat_cooldown_seconds = 14400
+global_cooldown_seconds = 1800
+max_pokes_per_day = 0
+lookback_seconds = 1800
+recent_window_seconds = 300
+recent_fetch_limit = 50
+min_recent_messages = 5
+respect_spam_history = true
+respect_spam_window_seconds = 600
+target_strategy = "active_speaker"
+min_delay_seconds = 2.0
+max_delay_seconds = 6.0
+whitelist_groups = []
+blacklist_groups = []

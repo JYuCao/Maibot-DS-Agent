@@ -1,0 +1,20 @@
+[plugin]
+enabled = true
+config_version = "2.1.0"
+
+[general]
+filter_send_emoji = true
+tool_discovery = "始终发现"
+
+[selector]
+max_emotion_tags = 30
+max_selected_tags = 5
+llm_model = "replyer"
+context_message_limit = 12
+
+[semantic]
+enabled = true
+refresh_interval_seconds = 1800
+similarity_threshold = 0.35
+embed_batch_size = 8
+fetch_concurrency = 2

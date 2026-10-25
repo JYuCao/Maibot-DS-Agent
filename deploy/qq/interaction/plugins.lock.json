@@ -1,0 +1,24 @@
+{
+  "smart_poke_plugin": {
+    "repository": "https://github.com/TAIY2020/smart_poke_plugin.git",
+    "commit": "59ff292b4d912a5cbe5d09cce32381e8497d350f",
+    "version": "1.11.1"
+  },
+  "emoji_text_selector": {
+    "repository": "https://github.com/hsd221/maibot-plugin-emoji-text-selection.git",
+    "commit": "64cf00d0dae18fe0dd7ab36a860607a5364fc484",
+    "version": "2.1.0",
+    "local_patch": "emoji-sdk-compat.patch",
+    "patch_sha256": "159f6717ed6e5ec621331b03c6c00df3c7228d47066679e46a3c443cbda46034"
+  },
+  "steam_browser_plugin": {
+    "repository": "https://github.com/SengokuCola/steam_browser_plugin.git",
+    "commit": "2acc724f9ab40620f1dd28ffeb2e6fd28b4494d2",
+    "version": "0.1.4"
+  },
+  "content_understanding_plugin": {
+    "repository": "https://github.com/YukiSakiko/content_understanding_plugin.git",
+    "commit": "a0d1801bfb499ce27080898652c81142b3d68082",
+    "version": "2.1.1"
+  }
+}

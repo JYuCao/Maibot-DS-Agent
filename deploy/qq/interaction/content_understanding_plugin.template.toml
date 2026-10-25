@@ -1,0 +1,20 @@
+[plugin]
+enabled = true
+config_version = "1.0.0"
+
+[parse]
+enable_ai_summary = true
+enable_in_group = true
+enable_in_private = true
+cache_ttl_seconds = 3600
+enable_douyin = true
+
+[credential]
+sessdata = ""
+bili_jct = ""
+buvid3 = ""
+dedeuserid = ""
+douyin_cookie = ""
+
+[permission]
+admin_users = []

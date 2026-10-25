@@ -55,7 +55,7 @@ def main() -> None:
             assert after["metrics"] == before["metrics"], "已有日记查询引发了额外模型调用"
             print(json.dumps({"diary_day": day, "chars": len(diary["text"]),
                               "sha256": hashlib.sha256(diary["text"].encode()).hexdigest()}, ensure_ascii=False))
-        assert config["plugin"]["enabled"] and config["plugin"]["config_version"] == "0.6.0"
+        assert config["plugin"]["enabled"] and config["plugin"]["config_version"] == "0.8.0"
         db_path = ROOT / "data/MaiMBot-plugin-data/jycao.social-life/social.sqlite3"
         with sqlite3.connect(f"file:{db_path}?mode=ro", uri=True) as db:
             assert db.execute("PRAGMA quick_check").fetchone()[0] == "ok"

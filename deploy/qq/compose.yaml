@@ -96,6 +96,10 @@ services:
       - ../../data/MaiMBot/emoji:/data/emoji
       - ../../plugins/MaiBot-Napcat-Adapter:/MaiMBot/plugins/MaiBot-Napcat-Adapter
       - ../../plugins/social_life_plugin:/MaiMBot/plugins/social_life_plugin
+      - ../../plugins/smart_poke_plugin:/MaiMBot/plugins/smart_poke_plugin
+      - ../../plugins/emoji_text_selector:/MaiMBot/plugins/emoji_text_selector
+      - ../../plugins/steam_browser_plugin:/MaiMBot/plugins/steam_browser_plugin
+      - ../../plugins/content_understanding_plugin:/MaiMBot/plugins/content_understanding_plugin
       - ../../data/MaiMBot/logs:/MaiMBot/logs
     logging: *logging
   napcat:

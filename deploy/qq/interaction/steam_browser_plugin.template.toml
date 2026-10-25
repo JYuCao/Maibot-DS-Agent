@@ -1,0 +1,9 @@
+api_key = ""
+default_player = ""
+country = "cn"
+language = "schinese"
+timeout = 15.0
+proxy_url = ""
+
+[plugin]
+config_version = "0.1.1"

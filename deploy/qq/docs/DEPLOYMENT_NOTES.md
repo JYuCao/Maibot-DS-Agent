@@ -13,7 +13,7 @@
 ## 版本与结构
 
 - MaiBot：v1.3.15，提交 `062d45cf8`；以 `pyproject.toml` 为准，README 的版本标注已落后。
-- 核心：官方 `sengokucola/maibot` 镜像，本地原始基底 `maibot-qq-core:1.3.15-062d45cf8`，当前实际运行的记忆修复镜像见文末记录。关键配置和记忆宿主源码哈希已与本仓库比对一致。
+- 核心：官方 `sengokucola/maibot` 镜像，本地原始基底 `maibot-qq-core:1.3.15-062d45cf8`，当前使用 `maibot-qq-core:1.3.15-interaction-v1`，在记忆修复镜像上补齐视频插件依赖。12 个记忆修复源码／Prompt 哈希验证保持一致；新插件配置与限制见 [交互插件](INTERACTION_PLUGINS.md)。
 - NapCat：4.18.41，官方 Compose 所用的 `mlikiowa/napcat-docker`，本地固定别名 `maibot-qq-napcat:4.18.41`。
 - 适配器：官方 `Mai-with-u/MaiBot-Napcat-Adapter` 插件 v1.4.1，提交 `d87203e2eff1835895ee34196b17a571dc6bbe24`。它兼容本版本，但上游已停止维护；没有部署旧式独立适配器进程。
 - 编排：`deploy/qq/compose.yaml`。统一使用 `./deploy/qq/compose.sh`，脚本会为 WSL 添加 GPU 设备覆盖文件；根目录默认编排包含其他服务和不同的端口暴露方式。

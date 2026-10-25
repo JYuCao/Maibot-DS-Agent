@@ -1,0 +1,22 @@
+diff --git a/plugin.py b/plugin.py
+index ea40fb7..cbf3809 100644
+--- a/plugin.py
++++ b/plugin.py
+@@ -83,7 +83,7 @@ class EmojiSelectorSectionConfig(PluginConfigBase):
+         description="LLM 最多选择的标签数（当前版本固定单选，此配置暂未启用）",
+         json_schema_extra={"label": "最多选择标签数"},
+     )
+-    llm_model: Literal["emoji", "utils", "planner", "reply"] = Field(
++    llm_model: Literal["emoji", "utils", "planner", "replyer"] = Field(
+         default="emoji",
+         description="标签选择用的模型任务名",
+         json_schema_extra={"label": "LLM 模型"},
+@@ -997,7 +997,7 @@ class EmojiTextSelectorPlugin(MaiBotPlugin):
+             )
+             llm_result = await self.ctx.llm.generate(
+                 prompt=prompt,
+-                model=self.config.selector.llm_model,
++                task_name=self.config.selector.llm_model,
+             )
+ 
+             response_text = ""

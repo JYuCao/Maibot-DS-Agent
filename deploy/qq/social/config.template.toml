@@ -1,7 +1,7 @@
-# 部署偏好模板版本：5；真实 QQ 主动发送仍须明确授权后在本地启用。
+# 部署偏好模板版本：9；真实 QQ 主动发送仍须明确授权后在本地启用。
 [plugin]
 enabled = false
-config_version = "0.6.0"
+config_version = "0.8.0"
 locale = "zh_CN"
 
 [access]
@@ -49,25 +49,30 @@ group_daily_limit = 0
 private_daily_limit = 0
 quiet_start = "23:00"
 quiet_end = "08:00"
-idle_min_minutes = 30
-idle_max_minutes = 90
-stale_after_hours = 6
+idle_min_minutes = 10
+idle_max_minutes = 25
+stale_after_hours = 24
 group_cooldown_minutes = 240
 private_cooldown_minutes = 60
 
 [diary]
 enabled = true
-generation_time = "23:10"
+generation_time = "21:00"
 directory = "diaries"
 private_delivery_authorized = false
 auto_private_delivery = false
-source_limit_per_group = 60
-source_max_chars = 2200
-max_tokens = 512
+source_limit_per_group = 100
+source_max_chars = 4000
+max_tokens = 1536
 model_name = "qwen3-8b-local"
 defer_after_chat_seconds = 120
 catchup_previous_day = true
 include_local_private = false
+include_long_term_memory = true
+memory_limit = 4
+memory_max_chars = 1200
+include_qq_private = true
+structured_selection_enabled = true
 
 [social]
 qzone_enabled = false

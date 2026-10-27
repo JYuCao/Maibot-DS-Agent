@@ -1,7 +1,7 @@
-# 部署偏好模板版本：9；真实 QQ 主动发送仍须明确授权后在本地启用。
+# 部署偏好模板版本：12；真实 QQ 主动发送仍须明确授权后在本地启用。
 [plugin]
 enabled = false
-config_version = "0.8.0"
+config_version = "0.9.0"
 locale = "zh_CN"
 
 [access]
@@ -63,7 +63,7 @@ private_delivery_authorized = false
 auto_private_delivery = false
 source_limit_per_group = 100
 source_max_chars = 4000
-max_tokens = 1536
+max_tokens = 1536 # 技术输出上限；日记篇幅由角色自行决定
 model_name = "qwen3-8b-local"
 defer_after_chat_seconds = 120
 catchup_previous_day = true
@@ -73,6 +73,12 @@ memory_limit = 4
 memory_max_chars = 1200
 include_qq_private = true
 structured_selection_enabled = true
+daily_events_enabled = true
+event_task = "memory"
+event_model_name = "deepseek-flash"
+event_batch_chars = 9000
+event_max_batches = 24
+daily_message_limit = 5000
 
 [social]
 qzone_enabled = false

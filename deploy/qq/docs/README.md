@@ -6,6 +6,7 @@
 | --- | --- |
 | [源码快照与恢复](STATE_SNAPSHOT.md) | 本次提交范围、独立插件 bundle 恢复方式和未包含的数据 |
 | [交互插件](INTERACTION_PLUGINS.md) | 智能戳、表情选择、Steam、视频理解的配置、限制和维护 |
+| [长期记忆与日记优化](MEMORY_DIARY_OPTIMIZATION.md) | 当前记忆分层审计、摘要窗口修正、两阶段日记、验证与回滚 |
 | [私人日记机制](DIARY_MECHANISM.md) | 私聊优先取材、人物归属、选材与成文、独立预览和质量检查 |
 | [部署与维护](DEPLOYMENT_NOTES.md) | 服务状态、配置路径、启停、日志、费用监测、备份迁移 |
 | [AI 运行机制](AI_MECHANISM.md) | 如何收消息、决定发言、使用人格与上下文、形成和检索长期记忆 |
@@ -14,6 +15,7 @@
 | [人格与社交生活扩展](PERSONALITY_EXTENSION_NOTES.md) | 独立插件已加载、QQ 投递关闭、日记隔离、测试结果与待验收项 |
 | [QQ 掉线排查](QQ_CONNECTION_INCIDENT.md) | 历史登录异常证据、恢复及迁移边界；本次状态另见源码快照 |
 | [原始需求](REQUIREMENTS.md) | 保留最初的部署任务与 P0–P4 目标，不代表所有功能已经实现 |
+| [记忆与日记需求](REQUIREMENTS-3.md) | 本次优化的目标与约束 |
 | [扩展需求](REQUIREMENTS-2.md) | 人物关系、情绪、主动行为和独立日记需求 |
 
 ## 常用入口

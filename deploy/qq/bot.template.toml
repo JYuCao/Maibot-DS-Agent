@@ -1,4 +1,4 @@
-# 部署模板版本：6；字段来自 v1.3.15 Config。
+# 部署模板版本：7；字段来自 v1.3.15 Config。
 [chat]
 enable_reply_at = true
 max_context_size = 20
@@ -62,7 +62,7 @@ heuristic_memory_group_to_private_enabled = false
 heuristic_memory_private_to_group_enabled = false
 person_fact_writeback_enabled = true
 chat_summary_writeback_message_threshold = 60
-chat_summary_writeback_context_length = 40
+chat_summary_writeback_context_length = 120
 fuzzy_modify_allow_global_scope = false
 fuzzy_modify_auto_execute_enabled = false
 person_profile_injection_max_profiles = 1

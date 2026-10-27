@@ -21,7 +21,7 @@ def live_call(kind: str, name: str, arguments: dict) -> dict:
     with httpx.Client(base_url="http://127.0.0.1:18001", trust_env=False, timeout=15,
                       cookies={"maibot_session": token}) as client:
         response = client.post(f"/api/webui/plugins/runtime/webui/jycao.social-life/social/{kind}/{name}",
-                               json={"args": arguments, "confirmed": name == "retry"})
+                               json={"args": arguments, "confirmed": name in {"retry", "diary_edit", "diary_archive"}})
         response.raise_for_status()
         return response.json()["result"]
 
@@ -34,6 +34,18 @@ def main() -> None:
     diary.add_argument("--day", required=True)
     generate = sub.add_parser("generate", help="通过运行中插件生成一次本地日记，不发 QQ")
     generate.add_argument("--day", default="")
+    preview = sub.add_parser("preview", help="按日期生成独立预览，不覆盖旧日记")
+    preview.add_argument("--day", default="")
+    preview.add_argument("--revision", required=True)
+    edit = sub.add_parser("edit", help="管理员本地编辑，保留旧版本；不发QQ")
+    edit.add_argument("--day", required=True)
+    edit.add_argument("--file", required=True, help="UTF-8正文文件")
+    edit.add_argument("--sha256", required=True)
+    edit.add_argument("--confirm", action="store_true", required=True)
+    archive = sub.add_parser("archive", help="管理员归档日记，保留可恢复版本")
+    archive.add_argument("--day", required=True)
+    archive.add_argument("--sha256", required=True)
+    archive.add_argument("--confirm", action="store_true", required=True)
     retry = sub.add_parser("retry", help="明确同意额外模型调用后重试失败日记")
     retry.add_argument("--day", required=True)
     retry.add_argument("--confirm-model-call", action="store_true", required=True)
@@ -45,8 +57,15 @@ def main() -> None:
         event.add_argument("--" + argument, required=True)
     event.add_argument("--delta", required=True, type=float)
     args = parser.parse_args()
-    if args.command in {"generate", "retry", "relation", "event"}:
-        if args.command == "generate":
+    if args.command in {"generate", "retry", "relation", "event", "preview", "edit", "archive"}:
+        if args.command == "preview":
+            result = live_call("actions", "diary_preview", {"day": args.day, "revision": args.revision})
+        elif args.command == "edit":
+            result = live_call("actions", "diary_edit", {"day": args.day, "text": Path(args.file).read_text(encoding="utf-8"),
+                               "expected_sha256": args.sha256, "confirmed": True})
+        elif args.command == "archive":
+            result = live_call("actions", "diary_archive", {"day": args.day, "expected_sha256": args.sha256, "confirmed": True})
+        elif args.command == "generate":
             result = live_call("actions", "generate", {"day": args.day})
         elif args.command == "retry":
             result = live_call("actions", "retry", {"day": args.day, "allow_new_model_call": True})

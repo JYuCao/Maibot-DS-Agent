@@ -1,0 +1,591 @@
+{
+  "scope": "2026-10-26 local memory and diary optimization; no QQ test messages",
+  "memory_audit": {
+    "active_paragraphs": 8,
+    "deleted_paragraphs": 8,
+    "active_exact_duplicate_excess": 0,
+    "sources": {
+      "chat_summary": 8
+    },
+    "episodes": 8,
+    "profile_snapshots": 24,
+    "profile_people": 13,
+    "claims": [
+      {
+        "status": "retracted",
+        "count": 7
+      }
+    ],
+    "exact_relation_duplicates": 0,
+    "summary_windows": [
+      {
+        "context_length": 40,
+        "pending_message_count": 61,
+        "trigger": "message_threshold"
+      },
+      {
+        "context_length": 40,
+        "pending_message_count": 61,
+        "trigger": "message_threshold"
+      },
+      {
+        "context_length": 40,
+        "pending_message_count": 60,
+        "trigger": "message_threshold"
+      },
+      {
+        "context_length": 40,
+        "pending_message_count": 60,
+        "trigger": "message_threshold"
+      },
+      {
+        "context_length": 40,
+        "pending_message_count": 60,
+        "trigger": "message_threshold"
+      },
+      {
+        "context_length": 40,
+        "pending_message_count": 61,
+        "trigger": "message_threshold"
+      },
+      {
+        "context_length": 40,
+        "pending_message_count": 65,
+        "trigger": "message_threshold"
+      },
+      {
+        "context_length": 40,
+        "pending_message_count": 60,
+        "trigger": "message_threshold"
+      },
+      {
+        "context_length": 40,
+        "pending_message_count": 61,
+        "trigger": "message_threshold"
+      }
+    ],
+    "messages_by_day": [
+      {
+        "day": "2026-10-24",
+        "count": 303
+      },
+      {
+        "day": "2026-10-25",
+        "count": 833
+      },
+      {
+        "day": "2026-10-26",
+        "count": 22
+      }
+    ],
+    "cumulative_model_usage": [
+      {
+        "task_name": "embedding",
+        "calls": 611,
+        "failures": 0,
+        "mean_success_seconds": 0.027
+      },
+      {
+        "task_name": "fast_model",
+        "calls": 84,
+        "failures": 0,
+        "mean_success_seconds": 0.722
+      },
+      {
+        "task_name": "learner",
+        "calls": 85,
+        "failures": 0,
+        "mean_success_seconds": 1.381
+      },
+      {
+        "task_name": "memory",
+        "calls": 82,
+        "failures": 0,
+        "mean_success_seconds": 1.727
+      },
+      {
+        "task_name": "planner",
+        "calls": 766,
+        "failures": 0,
+        "mean_success_seconds": 1.369
+      },
+      {
+        "task_name": "replyer",
+        "calls": 377,
+        "failures": 10,
+        "mean_success_seconds": 2.671
+      },
+      {
+        "task_name": "utils",
+        "calls": 27,
+        "failures": 0,
+        "mean_success_seconds": 1.041
+      },
+      {
+        "task_name": "vlm",
+        "calls": 95,
+        "failures": 0,
+        "mean_success_seconds": 1.61
+      }
+    ],
+    "embedding": {
+      "retrieval_ready": true,
+      "runtime_ready": true,
+      "degraded": false,
+      "vector_health": {
+        "state": "healthy",
+        "error_code": "",
+        "reason": "",
+        "trusted_coverage": 1.0,
+        "recovery_stage": "idle",
+        "operation_id": "",
+        "copy_progress": {},
+        "updated_at": 1792944790.2631972
+      },
+      "report": {
+        "ok": true,
+        "configured_dimension": 512,
+        "detected_dimension": 512,
+        "vector_store_dimension": 512
+      }
+    },
+    "stored_text_retrieval_probes": [
+      {
+        "sample": "stored-1",
+        "success": true,
+        "target_in_top3": true,
+        "hit_count": 3,
+        "hit_types": [
+          "episode",
+          "paragraph",
+          "episode"
+        ],
+        "near_duplicate_pairs": 1,
+        "seconds": 0.06
+      },
+      {
+        "sample": "stored-2",
+        "success": true,
+        "target_in_top3": true,
+        "hit_count": 3,
+        "hit_types": [
+          "episode",
+          "paragraph",
+          "episode"
+        ],
+        "near_duplicate_pairs": 0,
+        "seconds": 0.024
+      },
+      {
+        "sample": "stored-3",
+        "success": true,
+        "target_in_top3": true,
+        "hit_count": 3,
+        "hit_types": [
+          "episode",
+          "paragraph",
+          "episode"
+        ],
+        "near_duplicate_pairs": 0,
+        "seconds": 0.023
+      }
+    ]
+  },
+  "synthetic_extraction_first_run": {
+    "synthetic_only": true,
+    "samples": 12,
+    "expected_stable_or_shared_facts": 5,
+    "accepted": 4,
+    "true_positive": 4,
+    "false_positive": 0,
+    "false_negative": 1,
+    "bot_receiver_bound": true,
+    "source_fact_journal_writes": 0,
+    "database_writes": 0,
+    "qq_messages_sent": 0,
+    "reply_synthetic_fact_terms_present": true,
+    "extraction": {
+      "seconds": 1.065,
+      "usage": {
+        "prompt_tokens": 482,
+        "completion_tokens": 144,
+        "total_tokens": 626,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 482
+      }
+    },
+    "reply": {
+      "seconds": 0.864,
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 59,
+        "total_tokens": 70,
+        "prompt_tokens_details": {
+          "cached_tokens": 3
+        }
+      }
+    },
+    "limitation": "Term presence is not semantic correctness; dry-run precision is not production write accuracy."
+  },
+  "synthetic_extraction_confirmation": {
+    "synthetic_only": true,
+    "samples": 12,
+    "expected_stable_or_shared_facts": 5,
+    "accepted": 4,
+    "accepted_case_indices": [
+      0,
+      1,
+      8,
+      11
+    ],
+    "missed_case_indices": [
+      2
+    ],
+    "true_positive": 4,
+    "false_positive": 0,
+    "false_negative": 1,
+    "bot_receiver_bound": true,
+    "source_fact_journal_writes": 0,
+    "database_writes": 0,
+    "qq_messages_sent": 0,
+    "reply_synthetic_fact_terms_present": null,
+    "extraction": {
+      "seconds": 1.179,
+      "usage": {
+        "prompt_tokens": 482,
+        "completion_tokens": 144,
+        "total_tokens": 626,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 226
+      }
+    },
+    "reply": {},
+    "limitation": "Term presence is not semantic correctness; dry-run precision is not production write accuracy."
+  },
+  "synthetic_summary_draft": {
+    "synthetic_shared_event": true,
+    "important_event_retained_in_summary_draft": true,
+    "draft_has_entities": true,
+    "draft_has_relations": true,
+    "database_writes": 0,
+    "qq_messages_sent": 0,
+    "seconds": 1.073,
+    "usage": {
+      "prompt_tokens": 1369,
+      "completion_tokens": 103,
+      "total_tokens": 1472,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 1369
+    }
+  },
+  "diary_first_automatic_assessment": {
+    "automatic_review_only_not_human_ground_truth": true,
+    "reviews": [
+      {
+        "day": "2026-10-24",
+        "assessment": {
+          "speaker_confusion_count": 0,
+          "unsupported_event_count": 1,
+          "recap_only": false,
+          "uncertain": false
+        },
+        "seconds": 0.821,
+        "usage": {
+          "prompt_tokens": 2062,
+          "completion_tokens": 32,
+          "total_tokens": 2094,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 2062
+        }
+      },
+      {
+        "day": "2026-10-25",
+        "assessment": {
+          "speaker_confusion_count": 0,
+          "unsupported_event_count": 0,
+          "recap_only": false,
+          "uncertain": false
+        },
+        "seconds": 0.625,
+        "usage": {
+          "prompt_tokens": 1954,
+          "completion_tokens": 32,
+          "total_tokens": 1986,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1954
+        }
+      }
+    ]
+  },
+  "diary_writing_replays": {
+    "writing_only_replays": [
+      {
+        "day": "2026-10-24",
+        "chars": 199,
+        "writing": {
+          "seconds": 6.722,
+          "usage": {
+            "completion_tokens": 133,
+            "prompt_tokens": 2648,
+            "total_tokens": 2781,
+            "prompt_tokens_details": {
+              "cached_tokens": 87
+            }
+          }
+        },
+        "extra_event_calls": 0
+      },
+      {
+        "day": "2026-10-25",
+        "chars": 205,
+        "writing": {
+          "seconds": 5.898,
+          "usage": {
+            "completion_tokens": 135,
+            "prompt_tokens": 2541,
+            "total_tokens": 2676,
+            "prompt_tokens_details": {
+              "cached_tokens": 309
+            }
+          }
+        },
+        "extra_event_calls": 0
+      }
+    ]
+  },
+  "diary_final_automatic_assessment": {
+    "automatic_review_only_not_human_ground_truth": true,
+    "reviews": [
+      {
+        "day": "2026-10-24",
+        "assessment": {
+          "speaker_confusion_count": 0,
+          "unsupported_event_count": 0,
+          "recap_only": false,
+          "uncertain": false
+        },
+        "seconds": 0.782,
+        "usage": {
+          "prompt_tokens": 2054,
+          "completion_tokens": 32,
+          "total_tokens": 2086,
+          "prompt_tokens_details": {
+            "cached_tokens": 1792
+          },
+          "prompt_cache_hit_tokens": 1792,
+          "prompt_cache_miss_tokens": 262
+        }
+      },
+      {
+        "day": "2026-10-25",
+        "assessment": {
+          "speaker_confusion_count": 0,
+          "unsupported_event_count": 0,
+          "recap_only": false,
+          "uncertain": false
+        },
+        "seconds": 0.992,
+        "usage": {
+          "prompt_tokens": 1956,
+          "completion_tokens": 32,
+          "total_tokens": 1988,
+          "prompt_tokens_details": {
+            "cached_tokens": 1664
+          },
+          "prompt_cache_hit_tokens": 1664,
+          "prompt_cache_miss_tokens": 292
+        }
+      }
+    ]
+  },
+  "notes": [
+    "Confirmation run skips reply-use generation; its null term-presence field means not tested.",
+    "Synthetic stable reference set is indices 0,1,8,11; index 2 is a shared event, tested separately via summary draft.",
+    "Stored-text probes do not measure semantic paraphrase recall.",
+    "No test facts or diaries were ingested into production memory. Native retrieval may reinforce access counts."
+  ],
+  "completed_full_diary_pipelines": [
+    {
+      "day": "2026-10-24",
+      "accepted_messages": 293,
+      "scenes": 42,
+      "events": 22,
+      "event_calls": 6,
+      "event_prompt_tokens": 23344,
+      "event_completion_tokens": 1412,
+      "event_seconds": 12.652996920005535,
+      "writing": {
+        "elapsed": 6.467373019000661,
+        "prompt_tokens": 2911,
+        "completion_tokens": 143
+      },
+      "diary_chars": 226,
+      "total_elapsed": 19.51211152199903
+    },
+    {
+      "day": "2026-10-25",
+      "accepted_messages": 796,
+      "scenes": 131,
+      "events": 60,
+      "event_calls": 17,
+      "event_prompt_tokens": 63967,
+      "event_completion_tokens": 3912,
+      "event_seconds": 34.01402163200328,
+      "writing": {
+        "elapsed": 5.628649909998785,
+        "prompt_tokens": 2804,
+        "completion_tokens": 129
+      },
+      "diary_chars": 207,
+      "total_elapsed": 59.4100511430006
+    }
+  ],
+  "diary_native_final_assessment": {
+    "automatic_review_only_not_human_ground_truth": true,
+    "reviews": [
+      {
+        "day": "2026-10-24",
+        "assessment": {
+          "speaker_confusion_count": 0,
+          "unsupported_event_count": 0,
+          "recap_only": false,
+          "uncertain": false
+        },
+        "seconds": 1.136,
+        "usage": {
+          "prompt_tokens": 2978,
+          "completion_tokens": 32,
+          "total_tokens": 3010,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 2978
+        }
+      },
+      {
+        "day": "2026-10-25",
+        "assessment": {
+          "speaker_confusion_count": 0,
+          "unsupported_event_count": 1,
+          "recap_only": false,
+          "uncertain": false
+        },
+        "seconds": 0.843,
+        "usage": {
+          "prompt_tokens": 2986,
+          "completion_tokens": 32,
+          "total_tokens": 3018,
+          "prompt_tokens_details": {
+            "cached_tokens": 256
+          },
+          "prompt_cache_hit_tokens": 256,
+          "prompt_cache_miss_tokens": 2730
+        }
+      }
+    ]
+  },
+  "unit_tests": {
+    "plugin_passed": 62,
+    "memory_integration_passed": 21,
+    "ruff": "passed"
+  },
+  "final_compressed_diary_pipelines": [
+    {
+      "day": "2026-10-24",
+      "accepted_messages": 293,
+      "scenes": 42,
+      "event_calls": 3,
+      "event_prompt_tokens": 13155,
+      "event_completion_tokens": 985,
+      "event_seconds": 7.571,
+      "writing": {
+        "elapsed": 7.061861561000114,
+        "success": true,
+        "prompt_tokens": 2771,
+        "completion_tokens": 155
+      },
+      "diary_chars": 244,
+      "total_elapsed": 15.104
+    },
+    {
+      "day": "2026-10-25",
+      "accepted_messages": 796,
+      "scenes": 131,
+      "event_calls": 8,
+      "event_prompt_tokens": 36089,
+      "event_completion_tokens": 2571,
+      "event_seconds": 20.141,
+      "writing": {
+        "elapsed": 5.701422578000347,
+        "success": true,
+        "prompt_tokens": 2850,
+        "completion_tokens": 117
+      },
+      "diary_chars": 174,
+      "total_elapsed": 118.307
+    }
+  ],
+  "all_trial_event_calls": [
+    {
+      "day": "2026-10-26",
+      "calls": 47,
+      "errors": 3,
+      "prompt_tokens": 184002,
+      "completion_tokens": 11400
+    }
+  ],
+  "trial_failures": [
+    {
+      "job_key": "diary-preview-req3-v1:2026-10-24",
+      "state": "interrupted",
+      "error": "ProcessInterrupted"
+    },
+    {
+      "job_key": "diary-preview-req3-v1:2026-10-25",
+      "state": "interrupted",
+      "error": "ProcessInterrupted"
+    },
+    {
+      "job_key": "diary-preview-req3-v2:2026-10-24",
+      "state": "failed",
+      "error": "events:ValueError"
+    },
+    {
+      "job_key": "diary-preview-req3-v2:2026-10-25",
+      "state": "failed",
+      "error": "events:ValueError"
+    },
+    {
+      "job_key": "diary-preview-req3-v3:2026-10-24",
+      "state": "failed",
+      "error": "events:ValueError"
+    },
+    {
+      "job_key": "diary-preview-req3-v3:2026-10-25",
+      "state": "failed",
+      "error": "events:ValueError"
+    },
+    {
+      "job_key": "diary-preview-req3-v6:2026-10-24",
+      "state": "failed",
+      "error": "writing:RPCError"
+    }
+  ],
+  "original_diaries_unchanged": true
+}

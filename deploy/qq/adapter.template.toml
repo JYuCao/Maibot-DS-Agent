@@ -1,9 +1,10 @@
+# 部署模板版本：2；复用原生OneBot适配器，保留QQ身份及会话作用域。
 [plugin]
 enabled = true
 enable_private_chat_tool = false
 config_version = "0.1.0"
 [napcat_server]
-host = "napcat"
+host = "snowluma"
 port = 3001
 token = ""
 heartbeat_interval = 30.0

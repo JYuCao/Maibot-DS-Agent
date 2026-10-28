@@ -23,10 +23,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--require-qq-stopped", action="store_true", help="额外要求 QQ 客户端停止，用于离线验收")
     args = parser.parse_args()
-    state = subprocess.run(["docker", "inspect", "maibot-qq-napcat-1", "--format", "{{.State.Status}}"],
+    marker = ROOT / "deploy/qq/gateway.local"
+    gateway = marker.read_text().strip() if marker.exists() else "snowluma"
+    if gateway not in {"napcat", "snowluma"}:
+        raise ValueError("Invalid QQ gateway selection")
+    state = subprocess.run(["docker", "inspect", "maibot-qq-" + gateway + "-1", "--format", "{{.State.Status}}"],
                            capture_output=True, text=True, check=True)
     if args.require_qq_stopped:
-        assert state.stdout.strip() == "exited", "此验收要求 NapCat 保持停止"
+        assert state.stdout.strip() == "exited", "此验收要求当前 QQ 网关保持停止"
     token = json.loads((ROOT / "data/MaiMBot/webui.json").read_text())["access_token"]
     with httpx.Client(base_url=BASE, trust_env=False, timeout=15) as client:
         result = client.post(PLUGIN + "/queries/status", json={"args": {}})
@@ -59,7 +63,7 @@ def main() -> None:
         db_path = ROOT / "data/MaiMBot-plugin-data/jycao.social-life/social.sqlite3"
         with sqlite3.connect(f"file:{db_path}?mode=ro", uri=True) as db:
             assert db.execute("PRAGMA quick_check").fetchone()[0] == "ok"
-    print("PASS: native plugin registration/RPC, authentication, local diary idempotency, SQLite integrity; NapCat=" + state.stdout.strip() + ".")
+    print("PASS: native plugin registration/RPC, authentication, local diary idempotency, SQLite integrity; " + gateway + "=" + state.stdout.strip() + ".")
 
 
 if __name__ == "__main__":

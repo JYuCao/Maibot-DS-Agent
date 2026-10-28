@@ -27,15 +27,15 @@ async def check_qq() -> None:
                         data = json.loads(message.data)
                         if data.get("echo") == "deployment-readonly":
                             assert data.get("retcode") == 0 and data.get("data", {}).get("user_id"), "QQ is not logged in"
-                            print("PASS: NapCat authenticated WebSocket and read-only get_login_info.")
+                            print("PASS: QQ OneBot authenticated WebSocket and read-only get_login_info.")
                             return
-            raise RuntimeError("No login response from NapCat")
+            raise RuntimeError("No login response from QQ OneBot gateway")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--deepseek", action="store_true", help="发起一次极短的付费模型请求")
-    parser.add_argument("--qq", action="store_true", help="只读检查 NapCat 登录与 WebSocket，不发送消息")
+    parser.add_argument("--qq", action="store_true", help="只读检查 QQ OneBot 网关登录与 WebSocket，不发送消息")
     args = parser.parse_args()
     config = tomllib.loads(Path("/MaiMBot/config/model_config.toml").read_text())
     with httpx.Client(timeout=60, trust_env=False) as client:

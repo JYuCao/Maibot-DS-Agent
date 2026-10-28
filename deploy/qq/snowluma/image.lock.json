@@ -1,0 +1,15 @@
+{
+  "release": "v2.2.1",
+  "source_tree": "8ffd314260e9e2b6967eeca494d87aa5be046c34",
+  "official_image": "motricseven7/snowluma:v2.2.1",
+  "platform": "linux/amd64",
+  "manifest_digest": "sha256:74d6874a4240636dca700734f31fbce7d0735cbce6bb43780dd8e3788eddccc9",
+  "config_digest": "sha256:f819e96808d03205ba2a6a152903de9e3b0aa01787ea6d1da5091b4e4e333fc1",
+  "release_lite_sha256": "4f98612623eca34b28eac826753ec8e0b32a130f572c06580dc4ae43a6c874d3",
+  "sources": [
+    "https://github.com/SnowLuma/SnowLuma/releases/tag/v2.2.1",
+    "https://github.com/SnowLuma/SnowLuma.Docker.Framework",
+    "https://snowluma.github.io/en/docs/guide/configuration"
+  ],
+  "imported_image_id": "sha256:de7d4b485737002994b623f39bcb2843b652bb571aea9f7f4680f61606c9b0e3"
+}

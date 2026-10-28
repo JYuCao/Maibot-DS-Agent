@@ -4,6 +4,7 @@
 
 | 文档 | 用途 |
 | --- | --- |
+| [SnowLuma替换NapCat](SNOWLUMA_MIGRATION.md) | 当前迁移分支、首次扫码、独立数据、校验与回滚 |
 | [源码快照与恢复](STATE_SNAPSHOT.md) | 本次提交范围、独立插件 bundle 恢复方式和未包含的数据 |
 | [交互插件](INTERACTION_PLUGINS.md) | 智能戳、表情选择、Steam、视频理解的配置、限制和维护 |
 | [长期记忆与日记优化](MEMORY_DIARY_OPTIMIZATION.md) | 当前记忆分层审计、摘要窗口修正、两阶段日记、验证与回滚 |

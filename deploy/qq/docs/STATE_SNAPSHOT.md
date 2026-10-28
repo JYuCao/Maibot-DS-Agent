@@ -25,6 +25,20 @@ git -C plugins/social_life_plugin bundle create "$PWD/deploy/qq/social/social-li
 git bundle verify deploy/qq/social/social-life-plugin.bundle
 ```
 
+### bundle 如何随主仓库推送
+
+bundle 是插件源码及提交历史的 Git 归档，不是插件运行数据。它作为主仓库的普通二进制文件，随主仓库的 commit / push 上传；不会自动向插件远端执行 push，也不会自动收录插件工作区中未提交的修改。当前社交插件没有配置远端，bundle 内的 HEAD 与插件提交 `7e27682d93982df61a106bc2c8a117c99ae93519` 一致。
+
+更新插件后，先在插件独立仓库检查并提交源码，再执行上面的 bundle 生成与校验命令，最后在主仓库执行：
+
+```bash
+git add deploy/qq/social/social-life-plugin.bundle
+git commit -m "chore(deploy): refresh social plugin source bundle"
+git push fork HEAD
+```
+
+未跟踪的实际配置和 `data/` 下的数据库、记忆、日记、QQ登录与空间凭据均不在 bundle 中，需要另行私密备份。若日后希望在线查看插件源码及逐行 diff，可以另建插件远端并从插件仓库单独推送；当前推送不会创建额外仓库。
+
 仅恢复 Git 仓库不能恢复完整部署。私有配置和数据目录的备份范围、模型与镜像准备见 [部署与维护](DEPLOYMENT_NOTES.md)；这些内容需要单独安全备份，不应上传到公开 Git 仓库。
 
 

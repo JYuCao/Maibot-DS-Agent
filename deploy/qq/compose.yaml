@@ -103,6 +103,7 @@ services:
       - ../../data/MaiMBot/logs:/MaiMBot/logs
     logging: *logging
   napcat:
+    profiles: ["napcat"]
     image: ${NAPCAT_IMAGE:-maibot-qq-napcat:4.18.41}
     restart: unless-stopped
     environment:
@@ -115,4 +116,45 @@ services:
       - ../../docker-config/napcat:/app/napcat/config
       - ../../data/qq:/app/.config/QQ
       - ../../data/MaiMBot:/MaiMBot/data
+    logging: *logging
+
+  snowluma:
+    profiles: ["snowluma"]
+    image: ${SNOWLUMA_IMAGE:-motricseven7/snowluma:v2.2.1}
+    pull_policy: never
+    restart: unless-stopped
+    shm_size: 1gb
+    mem_limit: 2g
+    cpus: 2
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 1048576
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp=unconfined
+    environment:
+      TZ: Asia/Shanghai
+      SNOWLUMA_UID: "1000"
+      SNOWLUMA_GID: "1000"
+      SNOWLUMA_WEBUI_HOST: 0.0.0.0
+      SNOWLUMA_WEBUI_PORT: "5099"
+      SNOWLUMA_ONEBOT_HOST: 0.0.0.0
+      SNOWLUMA_LOG_LEVEL: info
+      SNOWLUMA_HOOK_AUTOLOAD: "1"
+      SNOWLUMA_TELEMETRY: "0"
+      SNOWLUMA_QQ_FLAGS: --disable-gpu --disable-software-rasterizer --disable-gpu-compositing
+    ports:
+      - "127.0.0.1:5099:5099"
+      - "127.0.0.1:6081:6081"
+    volumes:
+      - ../../data/snowluma/app:/app/data
+      - ../../data/snowluma/qq-config:/app/.config
+      - ../../data/snowluma/qq-share:/app/.local/share
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('node:http').get('http://127.0.0.1:5099/',r=>process.exit(r.statusCode<500?0:1)).on('error',()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
     logging: *logging

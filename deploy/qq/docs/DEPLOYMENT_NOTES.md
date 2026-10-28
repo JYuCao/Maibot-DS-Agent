@@ -1,5 +1,7 @@
 # QQ 角色部署记录
 
+当前分支 `feat/snowluma-migration` 已完成SnowLuma替换接入与登录后只读联通验收。当前入口／启动／回滚以 [SnowLuma迁移说明](SNOWLUMA_MIGRATION.md) 为准；下列NapCat登录与6099端口记录保留为原部署历史。
+
 # 当前 QQ 已恢复接入（2026-10-25）
 
 用户处理安全限制后明确授权恢复。已启动原 NapCat 容器，由用户扫码登录；00:48 左右只读检查确认登录身份为配置的机器人小号，认证 WebSocket、get_login_info 与 MaiBot 适配器连接通过。未发送 QQ 测试消息；本次未保存 QQ 密码，现有白名单和凭据配置未改。新日志暂未出现 KickedOffLine，长期稳定性仍待观察。

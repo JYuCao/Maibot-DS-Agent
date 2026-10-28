@@ -1,0 +1,30 @@
+{
+  "branch": "feat/snowluma-migration",
+  "snowluma_version": "2.2.1-node",
+  "linux_qq_package_version": "3.2.32-52194",
+  "node_version": "v24.22.1",
+  "expected_bot_identity_verified": true,
+  "onebot_online": true,
+  "friend_count": 7,
+  "group_count": 3,
+  "preserved_session_count": 4,
+  "adapter_endpoint": "ws://snowluma:3001",
+  "adapter_api_identity_preserved": "maibot-team.napcat-adapter",
+  "test_qq_messages_sent": 0,
+  "test_poke_requests": 0,
+  "test_qzone_writes": 0,
+  "ui_ports_loopback_only": [
+    5099,
+    6081
+  ],
+  "gpu_devices_assigned_to_gateway": false,
+  "actual_config_changed_fields": [
+    "napcat_server.host"
+  ],
+  "rollback_gateway": "napcat",
+  "backup_path": "data/deployment-config-backups/snowluma-20261027-202039",
+  "plugin_checks": "passed",
+  "memory_runtime_ready": true,
+  "real_message_delivery_tested": false,
+  "extended_actions_live_tested": false
+}
